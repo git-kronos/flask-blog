@@ -272,3 +272,4 @@ fabric.properties
 .env.local
 .idea/
 site.db
+static/
