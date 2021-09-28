@@ -1,27 +1,8 @@
 from core import app, db, bcrypt
 from core.forms import RegistrationForm, LoginForm
-from core.models import User, Post
+from core.models import User
 from flask import render_template, url_for, flash, redirect, request
 from flask_login import login_user, current_user, logout_user, login_required
-
-
-data = [
-    {"author": "Cory Schafer", "title": "Blog Post 1", "content": "First post content", "created": "April 20, 2018"},
-    {"author": "John Doe", "title": "Blog Post 2", "content": "Second post content", "created": "April 21, 2018"},
-    {"author": "Jane Doe", "title": "Blog Post 3", "content": "Third post content", "created": "April 22, 2018"}
-]
-
-
-@app.route('/')
-@login_required
-def home():
-    return render_template('home.html', posts=data)
-
-
-@app.route('/about')
-@login_required
-def about():
-    return render_template('about.html', title="About")
 
 
 @app.route('/register', methods=["GET", "POST"])
@@ -59,9 +40,3 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('login'))
-
-
-@app.route('/account')
-@login_required
-def account():
-    return render_template('account.html', title="Account")
