@@ -1,7 +1,7 @@
-#flask run
+#python run.py
 
 run:
-	 python run.py
+	flask run
 
 init:
 	python -m pip install --upgrade pip
