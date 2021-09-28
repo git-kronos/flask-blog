@@ -1,18 +1,12 @@
 from core import app
 from core.models import Post
-from flask import render_template
+from flask import render_template, request
 from flask_login import login_required
-
-
-# data = [
-#     {"author": "Cory Schafer", "title": "Blog Post 1", "content": "First post content", "created": "April 20, 2018"},
-#     {"author": "John Doe", "title": "Blog Post 2", "content": "Second post content", "created": "April 21, 2018"},
-#     {"author": "Jane Doe", "title": "Blog Post 3", "content": "Third post content", "created": "April 22, 2018"}
-# ]
 
 
 @app.route('/')
 @login_required
 def home():
-    data = Post.query.all()
-    return render_template('home.html', posts=data)
+    page = request.args.get('page', 1, type=int)
+    obj_list = Post.query.order_by(Post.date_posted.desc()).paginate(page=page, per_page=5)
+    return render_template('home.html', posts=obj_list)

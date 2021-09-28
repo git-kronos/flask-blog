@@ -1,6 +1,6 @@
 from core import app, db, bcrypt
 from core.forms import RegistrationForm, LoginForm
-from core.models import User
+from core.models import User, Post
 from flask import render_template, url_for, flash, redirect, request
 from flask_login import login_user, current_user, logout_user, login_required
 
@@ -40,3 +40,14 @@ def login():
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
+
+@app.route('/user/<string:username>')
+@login_required
+def posts_user(username):
+    page = request.args.get('page', 1, type=int)
+    user = User.query.filter_by(username=username).first_or_404()
+    obj_list = Post.query.filter_by(author=user)\
+        .order_by(Post.date_posted.desc())\
+        .paginate(page=page, per_page=5)
+    return render_template('posts_user.html', posts=obj_list, user=user)
