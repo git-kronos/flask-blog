@@ -82,7 +82,6 @@ def send_reset_email(user):
     msg.body += f"{url_for('reset_token', token=token, _external=True)} \n"
     msg.body += "If you did not make this request then "
     msg.body += "simply ignore this email and no changes will be made"
-    print(url_for("reset_token", token=token, _external=True))
     mail.send(msg)
 
 
