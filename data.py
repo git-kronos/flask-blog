@@ -59,6 +59,9 @@ class Data:
 
 
 if __name__ == "__main__":
+    print(BASE_DIR)
+    print(Data.posts_file)
+    print(Data.users_file)
     Data.drop_db()
     print("Table Droped...")
     Data.create_db()

@@ -1,5 +1,8 @@
-from core import app
-from os import environ as env
+from core import create_app
+from os import getenv
+
+app = create_app()
+
 
 if __name__ == "__main__":
-    app.run(debug=bool(env.get("FLASK_DEBUG")))
+    app.run(debug=bool(getenv("FLASK_DEBUG")))

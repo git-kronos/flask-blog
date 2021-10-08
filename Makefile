@@ -1,7 +1,6 @@
 #python run.py
 
 run: format
-	# flask run
 	python run.py
 
 init:
@@ -11,5 +10,8 @@ init:
 format:
 	black .
 
-db-recreate:
-	python data.py
+db-restore:
+	python core/data.py
+
+clean-pycache:
+	find . -type d -name __pycache__ -exec rm -r {} \+

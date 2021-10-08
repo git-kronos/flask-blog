@@ -1,11 +1,22 @@
-from core import app, db
-from core.forms import PostForm
+from core import db
 from core.models import Post
-from flask import render_template, url_for, flash, redirect, abort, request
-from flask_login import login_required, current_user
+from flask import (
+    Blueprint,
+    abort,
+    flash,
+    redirect,
+    render_template,
+    request,
+    url_for,
+)
+from flask_login import current_user, login_required
+
+from .forms import PostForm
+
+posts = Blueprint("posts", __name__)
 
 
-@app.route("/post/new", methods=["GET", "POST"])
+@posts.route("/post/new", methods=["GET", "POST"])
 @login_required
 def post_create():
     form = PostForm()
@@ -18,19 +29,19 @@ def post_create():
         )
         db.session.add(obj_list)
         db.session.commit()
-        return redirect(url_for("home"))
+        return redirect(url_for("main.home"))
     return render_template(
         "create_post.html", title="New Post", legend="Create Post", form=form
     )
 
 
-@app.route("/post/<int:pk>")
+@posts.route("/post/<int:pk>")
 def post_view(pk):
     obj = Post.query.get_or_404(pk)
     return render_template("post.html", title=obj.title, post=obj)
 
 
-@app.route("/post/<int:pk>/edit", methods=["GET", "POST"])
+@posts.route("/post/<int:pk>/edit", methods=["GET", "POST"])
 @login_required
 def post_edit(pk):
     obj = Post.query.get_or_404(pk)
@@ -42,7 +53,7 @@ def post_edit(pk):
         obj.content = form.content.data
         db.session.commit()
         flash("Post has been updated!", "success")
-        return redirect(url_for("post_view", pk=obj.id))
+        return redirect(url_for("posts.post_view", pk=obj.id))
     elif request.method == "GET":
         form.title.data = obj.title
         form.content.data = obj.content
@@ -51,7 +62,7 @@ def post_edit(pk):
     )
 
 
-@app.route("/post/<int:pk>/delete", methods=["POST"])
+@posts.route("/post/<int:pk>/delete", methods=["POST"])
 def post_delete(pk):
     obj = Post.query.get_or_404(pk)
     if obj.author != current_user:
@@ -59,4 +70,4 @@ def post_delete(pk):
     db.session.delete(obj)
     db.session.commit()
     flash("Post has been deleted!", "success")
-    return redirect(url_for("home"))
+    return redirect(url_for("main.home"))
