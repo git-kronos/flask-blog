@@ -25,10 +25,9 @@ class User(db.Model, UserMixin):
         s = Serializer(app.config["SECRET_KEY"])
         try:
             user_id = s.loads(token)["pk"]
-        except Exception as error:
-            print(error)
+        except:
             return None
-        return User.query.get()
+        return User.query.get(user_id)
 
     def __repr__(self):
-        return f"User({self.username}, {self.email}, {self.image_file})"
+        return f"User('{self.username}', '{self.email}', '{self.image_file}')"

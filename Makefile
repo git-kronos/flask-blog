@@ -1,7 +1,8 @@
 #python run.py
 
 run: format
-	flask run
+	# flask run
+	python run.py
 
 init:
 	python -m pip install --upgrade pip
@@ -9,5 +10,6 @@ init:
 
 format:
 	black .
-# db.create_all()
-# db.drop_all()
+
+db-recreate:
+	python data.py

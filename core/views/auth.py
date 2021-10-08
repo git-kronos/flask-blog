@@ -78,10 +78,11 @@ def send_reset_email(user):
         sender="noreply@demo.com",
         recipients=[user.email],
     )
-    msg.body = f"To reset your password, visit the following link:"
-    msg.body += f"{url_for('reset_token', token=token, _external=True)}"
+    msg.body = f"To reset your password, visit the following link: \n"
+    msg.body += f"{url_for('reset_token', token=token, _external=True)} \n"
     msg.body += "If you did not make this request then "
     msg.body += "simply ignore this email and no changes will be made"
+    print(url_for("reset_token", token=token, _external=True))
     mail.send(msg)
 
 
@@ -102,7 +103,7 @@ def reset_request():
 
 @app.route("/reset_password/<token>", methods=["GET", "POST"])
 def reset_token(token):
-    if current_user.is_authenticates:
+    if current_user.is_authenticated:
         return redirect(url_for("home"))
     user = User.verify_reset_token(token)
     if user is None:
@@ -116,7 +117,7 @@ def reset_token(token):
         user.password = hashed_password
         db.session.commit()
         flash(
-            f"Your Password for {form.username.data} has been updated!",
+            f"Your Password for @{user.username} has been updated!",
             "success",
         )
         return redirect(url_for("login"))
