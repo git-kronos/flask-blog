@@ -33,9 +33,11 @@ def create_app(confg_calss=Config):
     from core.main.routes import main
     from core.posts.routes import posts
     from core.users.routes import users
+    from core.errors.handlers import errors
 
     app.register_blueprint(users)
     app.register_blueprint(posts)
     app.register_blueprint(main)
+    app.register_blueprint(errors)
 
     return app
